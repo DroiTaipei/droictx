@@ -78,6 +78,7 @@ func (c *Context) HeaderMap() (ret map[string]string) {
 	return
 }
 
+// Set Context with Header Key, Store in Context with Short Key
 func (c *Context) HeaderSet(headerField, headerValue string) {
 	if sk, ok := hKMap[headerField]; ok {
 		c.Set(sk, headerValue)
