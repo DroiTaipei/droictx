@@ -1,20 +1,22 @@
 package droictx
 
 const (
-	HTTPHeaderAppID       = "X-Droi-AppID"
-	HTTPHeaderAppIDMode   = "X-Droi-AidMode"
-	HTTPHeaderDeviceID    = "X-Droi-DeviceID"
-	HTTPHeaderUserID      = "X-Droi-UserID"
-	HTTPHeaderRequestID   = "X-Droi-ReqID"
-	HTTPHeaderPlatformKey = "X-Droi-Platform-Key"
-	HTTPHeaderAPIKey      = "X-Droi-ApiKey"
-	ShortAppID            = "Aid"
-	ShortAppIDMode        = "Aidm"
-	ShortDeviceID         = "Did"
-	ShortUserID           = "Uid"
-	ShorRequestID         = "Rid"
-	ShortPlatformKey      = "XPk"
-	ShortAPIKey           = "Ak"
+	HTTPHeaderAppID        = "X-Droi-AppID"
+	HTTPHeaderAppIDMode    = "X-Droi-AidMode"
+	HTTPHeaderDeviceID     = "X-Droi-DeviceID"
+	HTTPHeaderUserID       = "X-Droi-UserID"
+	HTTPHeaderRequestID    = "X-Droi-ReqID"
+	HTTPHeaderPlatformKey  = "X-Droi-Platform-Key"
+	HTTPHeaderAPIKey       = "X-Droi-Api-Key"
+	HTTPHeaderServiceAppID = "X-Droi-Service-AppID"
+	ShortAppID             = "Aid"
+	ShortAppIDMode         = "Aidm"
+	ShortDeviceID          = "Did"
+	ShortUserID            = "Uid"
+	ShorRequestID          = "Rid"
+	ShortPlatformKey       = "XPk"
+	ShortAPIKey            = "Ak"
+	ShortServiceAppID      = "SAid"
 )
 
 // This interface designed from fasthttp *RequestHeader
@@ -28,23 +30,25 @@ var (
 
 func init() {
 	sKMap = map[string]string{
-		ShortAppID:       HTTPHeaderAppID,
-		ShortAppIDMode:   HTTPHeaderAppIDMode,
-		ShortDeviceID:    HTTPHeaderDeviceID,
-		ShortUserID:      HTTPHeaderUserID,
-		ShorRequestID:    HTTPHeaderRequestID,
-		ShortPlatformKey: HTTPHeaderPlatformKey,
-		ShortAPIKey:      HTTPHeaderAPIKey,
+		ShortAppID:        HTTPHeaderAppID,
+		ShortAppIDMode:    HTTPHeaderAppIDMode,
+		ShortDeviceID:     HTTPHeaderDeviceID,
+		ShortUserID:       HTTPHeaderUserID,
+		ShorRequestID:     HTTPHeaderRequestID,
+		ShortPlatformKey:  HTTPHeaderPlatformKey,
+		ShortAPIKey:       HTTPHeaderAPIKey,
+		ShortServiceAppID: HTTPHeaderServiceAppID,
 	}
 
 	hKMap = map[string]string{
-		HTTPHeaderAppID:       ShortAppID,
-		HTTPHeaderAppIDMode:   ShortAppIDMode,
-		HTTPHeaderDeviceID:    ShortDeviceID,
-		HTTPHeaderUserID:      ShortUserID,
-		HTTPHeaderRequestID:   ShorRequestID,
-		HTTPHeaderPlatformKey: ShortPlatformKey,
-		HTTPHeaderAPIKey:      ShortAPIKey,
+		HTTPHeaderAppID:        ShortAppID,
+		HTTPHeaderAppIDMode:    ShortAppIDMode,
+		HTTPHeaderDeviceID:     ShortDeviceID,
+		HTTPHeaderUserID:       ShortUserID,
+		HTTPHeaderRequestID:    ShorRequestID,
+		HTTPHeaderPlatformKey:  ShortPlatformKey,
+		HTTPHeaderAPIKey:       ShortAPIKey,
+		HTTPHeaderServiceAppID: ShortServiceAppID,
 	}
 }
 
