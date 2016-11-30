@@ -64,10 +64,12 @@ func IFieldShortKeyMap() (keyMap map[string]string) {
 
 func GetContextFromPeeker(p Peeker) Context {
 	c := Context{}
-	var v string
+	var v []byte
 	for hk, sk := range hKMap {
-		v = string(p.Peek(hk))
-		c.Set(sk, v)
+		v = p.Peek(hk)
+		if len(v) > 0 {
+			c.Set(sk, string(v))
+		}
 	}
 	return c
 }

@@ -1,6 +1,7 @@
 package droictx
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -70,7 +71,7 @@ func TestPeeker(t *testing.T) {
 		if key == "X-Droi-Service-AppID" {
 			return []byte("4RRFFV3edc")
 		}
-		return nil
+		return []byte{}
 	})
 
 	c := GetContextFromPeeker(peeker)
@@ -85,5 +86,11 @@ func TestPeeker(t *testing.T) {
 	}
 	if v, ok := c.GetString("SAid"); !ok || v != "4RRFFV3edc" {
 		t.Error("Service AppID not match SAid")
+	}
+
+	// Test Empty Field
+	m := c.Map()
+	if _, ok := m["Aidm"]; ok {
+		t.Error("Aidm should not exists")
 	}
 }
