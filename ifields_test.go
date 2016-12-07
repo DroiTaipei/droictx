@@ -1,7 +1,6 @@
 package droictx
 
 import (
-	"fmt"
 	"testing"
 )
 
