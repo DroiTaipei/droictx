@@ -16,6 +16,20 @@ func GetContext(r *fasthttp.RequestHeader) Context {
 }
 ```
 
+* `SetHTTPHeaders`
+  * It designed for set HTTP Headers From Context with a setter ( with Set method) 
+  * Usually, a setter is a *fasthttp.RequestHeader
+  * Sample Code 
+
+```
+var c droictx.Context
+var r r *fasthttp.RequestHeader
+c.SetHeaderFromContext(r)
+# Header should like X-Droi-AppID: xxxxxx
+```
+
+
+
 * `(c *Context) HeaderMap()`
   * It get the I-Fields values from Context, return a map with HTTP Header Key
   * e.g.

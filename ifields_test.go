@@ -9,6 +9,10 @@ type mockPeeker func(key string) []byte
 
 func (p mockPeeker) Peek(key string) []byte { return p(key) }
 
+type mockSetter map[string]string
+
+func (s mockSetter) Set(key, value string) { s[key] = value }
+
 func TestHeaderMap(t *testing.T) {
 	c := Context{}
 	c.Set("Aid", "ZXC123ASDQWE")
@@ -90,6 +94,35 @@ func TestPeeker(t *testing.T) {
 	// Test Empty Field
 	m := c.Map()
 	if _, ok := m["Aidm"]; ok {
+		t.Error("Aidm should not exists")
+	}
+}
+
+func TestSetter(t *testing.T) {
+
+	var s = make(mockSetter)
+	c := Context{}
+	c.HeaderSet("X-Droi-AppID", "ZXC123ASDQWE")
+	c.HeaderSet("X-Droi-ReqID", "1029384756")
+	c.HeaderSet("X-Droi-Api-Key", "abcdefg123")
+	c.HeaderSet("X-Droi-Service-AppID", "4RRFFV3edc")
+
+	c.SetHTTPHeaders(s)
+	if v, ok := s["X-Droi-AppID"]; !ok || v != "ZXC123ASDQWE" {
+		t.Error("AppID not match Aid")
+	}
+	if v, ok := s["X-Droi-ReqID"]; !ok || v != "1029384756" {
+		t.Error("ReqID not match Rid")
+	}
+	if v, ok := s["X-Droi-Api-Key"]; !ok || v != "abcdefg123" {
+		t.Error("APIKey not match Ak")
+	}
+	if v, ok := s["X-Droi-Service-AppID"]; !ok || v != "4RRFFV3edc" {
+		t.Error("Service AppID not match SAid")
+	}
+
+	// Test Empty Field
+	if _, ok := s["X-Droi-AidMode"]; ok {
 		t.Error("Aidm should not exists")
 	}
 }

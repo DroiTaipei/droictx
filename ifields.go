@@ -21,9 +21,14 @@ const (
 	ShortServiceAppIDMode      = "SAidm"
 )
 
-// This interface designed from fasthttp *RequestHeader
+// This interface designed for getting DroiCtx from fasthttp *RequestHeader
 type Peeker interface {
 	Peek(key string) []byte
+}
+
+// This interface designed for setting fasthttp *RequestHeader with DroiCtx
+type Setter interface {
+	Set(key, value string)
 }
 
 var (
@@ -78,12 +83,20 @@ func GetContextFromPeeker(p Peeker) Context {
 	return c
 }
 
+func (c *Context) SetHTTPHeaders(s Setter) {
+	for hk, sk := range c.HeaderMap() {
+		s.Set(hk, sk)
+	}
+}
+
 // retrun a map, key HTTP Header Field, value is the field value stored in Context
 func (c *Context) HeaderMap() (ret map[string]string) {
 	ret = make(map[string]string)
 	for sk, hk := range sKMap {
 		v, _ := c.GetString(sk)
-		ret[hk] = v
+		if len(v) > 0 {
+			ret[hk] = v
+		}
 	}
 	return
 }
