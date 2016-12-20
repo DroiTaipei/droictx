@@ -10,6 +10,7 @@ const (
 	HTTPHeaderAPIKey           = "X-Droi-Api-Key"
 	HTTPHeaderServiceAppID     = "X-Droi-Service-AppID"
 	HTTPHeaderServiceAppIDMode = "X-Droi-SAidMode"
+	HTTPContextKey             = "X-Ctx"
 	ShortAppID                 = "Aid"
 	ShortAppIDMode             = "Aidm"
 	ShortDeviceID              = "Did"
