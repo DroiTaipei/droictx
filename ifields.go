@@ -11,6 +11,12 @@ const (
 	HTTPHeaderServiceAppID     = "X-Droi-Service-AppID"
 	HTTPHeaderServiceAppIDMode = "X-Droi-SAidMode"
 	HTTPContextKey             = "X-Ctx"
+	HTTPHeaderRole             = "X-Droi-Role"
+	HTTPHeaderSessionToken     = "X-Droi-Session-Token"
+	HTTPHeaderURI              = "X-Droi-URI"
+	HTTPHeaderMethod           = "X-Droi-Method"
+	HTTPHeaderRemoteIP         = "X-Droi-Remote-IP"
+	HTTPHeaderRemotePort       = "X-Droi-Remote-Port"
 	ShortAppID                 = "Aid"
 	ShortAppIDMode             = "Aidm"
 	ShortDeviceID              = "Did"
@@ -20,6 +26,12 @@ const (
 	ShortAPIKey                = "Ak"
 	ShortServiceAppID          = "SAid"
 	ShortServiceAppIDMode      = "SAidm"
+	ShortRole                  = "R"
+	ShortSessionToken          = "St"
+	ShortURI                   = "XUri"
+	ShortMethod                = "XMd"
+	ShortRemoteIP              = "XIp"
+	ShortRemotePort            = "XPort"
 )
 
 // This interface designed for getting DroiCtx from fasthttp *RequestHeader
@@ -47,6 +59,12 @@ func init() {
 		ShortAPIKey:           HTTPHeaderAPIKey,
 		ShortServiceAppID:     HTTPHeaderServiceAppID,
 		ShortServiceAppIDMode: HTTPHeaderServiceAppIDMode,
+		ShortRole:             HTTPHeaderRole,
+		ShortSessionToken:     HTTPHeaderSessionToken,
+		ShortURI:              HTTPHeaderURI,
+		ShortMethod:           HTTPHeaderMethod,
+		ShortRemoteIP:         HTTPHeaderRemoteIP,
+		ShortRemotePort:       HTTPHeaderRemotePort,
 	}
 
 	hKMap = map[string]string{
@@ -59,6 +77,12 @@ func init() {
 		HTTPHeaderAPIKey:           ShortAPIKey,
 		HTTPHeaderServiceAppID:     ShortServiceAppID,
 		HTTPHeaderServiceAppIDMode: ShortServiceAppIDMode,
+		HTTPHeaderRole:             ShortRole,
+		HTTPHeaderSessionToken:     ShortSessionToken,
+		HTTPHeaderURI:              ShortURI,
+		HTTPHeaderMethod:           ShortMethod,
+		HTTPHeaderRemoteIP:         ShortRemoteIP,
+		HTTPHeaderRemotePort:       ShortRemotePort,
 	}
 }
 
