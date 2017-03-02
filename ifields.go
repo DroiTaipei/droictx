@@ -21,7 +21,7 @@ const (
 	ShortAppIDMode             = "Aidm"
 	ShortDeviceID              = "Did"
 	ShortUserID                = "Uid"
-	ShorRequestID              = "Rid"
+	ShortRequestID             = "Rid"
 	ShortPlatformKey           = "XPk"
 	ShortAPIKey                = "Ak"
 	ShortServiceAppID          = "SAid"
@@ -54,7 +54,7 @@ func init() {
 		ShortAppIDMode:        HTTPHeaderAppIDMode,
 		ShortDeviceID:         HTTPHeaderDeviceID,
 		ShortUserID:           HTTPHeaderUserID,
-		ShorRequestID:         HTTPHeaderRequestID,
+		ShortRequestID:        HTTPHeaderRequestID,
 		ShortPlatformKey:      HTTPHeaderPlatformKey,
 		ShortAPIKey:           HTTPHeaderAPIKey,
 		ShortServiceAppID:     HTTPHeaderServiceAppID,
@@ -72,7 +72,7 @@ func init() {
 		HTTPHeaderAppIDMode:        ShortAppIDMode,
 		HTTPHeaderDeviceID:         ShortDeviceID,
 		HTTPHeaderUserID:           ShortUserID,
-		HTTPHeaderRequestID:        ShorRequestID,
+		HTTPHeaderRequestID:        ShortRequestID,
 		HTTPHeaderPlatformKey:      ShortPlatformKey,
 		HTTPHeaderAPIKey:           ShortAPIKey,
 		HTTPHeaderServiceAppID:     ShortServiceAppID,
