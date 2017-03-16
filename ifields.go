@@ -28,6 +28,7 @@ const (
 	ShortServiceAppIDMode      = "SAidm"
 	ShortRole                  = "R"
 	ShortSessionToken          = "St"
+	ShortSessionID		   = "Sid"
 	ShortURI                   = "XUri"
 	ShortMethod                = "XMd"
 	ShortRemoteIP              = "XIp"
