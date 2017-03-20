@@ -17,6 +17,8 @@ const (
 	HTTPHeaderMethod           = "X-Droi-Method"
 	HTTPHeaderRemoteIP         = "X-Droi-Remote-IP"
 	HTTPHeaderRemotePort       = "X-Droi-Remote-Port"
+	HTTPHeaderSlotID           = "X-Droi-SlotID"
+	HTTPHeaderServiceAppCheat  = "X-Droi-Service-AppCheat"
 	ShortAppID                 = "Aid"
 	ShortAppIDMode             = "Aidm"
 	ShortDeviceID              = "Did"
@@ -28,11 +30,14 @@ const (
 	ShortServiceAppIDMode      = "SAidm"
 	ShortRole                  = "R"
 	ShortSessionToken          = "St"
-	ShortSessionID		   = "Sid"
 	ShortURI                   = "XUri"
 	ShortMethod                = "XMd"
 	ShortRemoteIP              = "XIp"
 	ShortRemotePort            = "XPort"
+	ShortSlotID                = "Slid"
+	ShortServiceAppCheat       = "SAc"
+	// this is only used in GoBuster and Accelerator for Push UDP
+	ShortSessionID = "Sid"
 )
 
 // This interface designed for getting DroiCtx from fasthttp *RequestHeader
@@ -66,6 +71,8 @@ func init() {
 		ShortMethod:           HTTPHeaderMethod,
 		ShortRemoteIP:         HTTPHeaderRemoteIP,
 		ShortRemotePort:       HTTPHeaderRemotePort,
+		ShortSlotID:           HTTPHeaderSlotID,
+		ShortServiceAppCheat:  HTTPHeaderServiceAppCheat,
 	}
 
 	hKMap = map[string]string{
@@ -84,6 +91,8 @@ func init() {
 		HTTPHeaderMethod:           ShortMethod,
 		HTTPHeaderRemoteIP:         ShortRemoteIP,
 		HTTPHeaderRemotePort:       ShortRemotePort,
+		HTTPHeaderSlotID:           ShortSlotID,
+		HTTPHeaderServiceAppCheat:  ShortServiceAppCheat,
 	}
 }
 
