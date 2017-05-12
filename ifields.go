@@ -38,6 +38,9 @@ const (
 	ShortServiceAppCheat       = "SAc"
 	// this is only used in GoBuster and Accelerator for Push UDP
 	ShortSessionID = "Sid"
+
+	//The most important Key !
+	SystemKey = "2BMustDie"
 )
 
 // This interface designed for getting DroiCtx from fasthttp *RequestHeader
