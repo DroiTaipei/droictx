@@ -43,15 +43,21 @@ const (
 	SystemKey = "2BMustDie"
 )
 
-// This interface designed for getting DroiCtx from fasthttp *RequestHeader
+//This interface designed for getting DroiCtx from fasthttp *RequestHeader
 type Peeker interface {
 	Peek(key string) []byte
 }
 
-// This interface designed for setting fasthttp *RequestHeader with DroiCtx
+//This interface designed for setting fasthttp *RequestHeader, net/http Header with DroiCtx
 type Setter interface {
 	Set(key, value string)
 }
+
+//Getter interface designed for getting DroiCtx from net/http Header
+type Getter interface {
+	Get(key string) string
+}
+
 
 var (
 	sKMap, hKMap map[string]string
@@ -116,6 +122,18 @@ func GetContextFromPeeker(p Peeker) Context {
 		v = p.Peek(hk)
 		if len(v) > 0 {
 			c.Set(sk, string(v))
+		}
+	}
+	return c
+}
+
+func GetContextFromGetter(g Getter) Context {
+	c := Context{}
+	var v string
+	for hk, sk := range hKMap {
+		v = g.Get(hk)
+		if len(v) > 0 {
+			c.Set(sk, v)
 		}
 	}
 	return c
