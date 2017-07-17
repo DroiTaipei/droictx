@@ -19,6 +19,7 @@ const (
 	HTTPHeaderRemotePort       = "X-Droi-Remote-Port"
 	HTTPHeaderSlotID           = "X-Droi-SlotID"
 	HTTPHeaderServiceAppCheat  = "X-Droi-Service-AppCheat"
+	HTTPHeaderHook             = "X-Droi-Hook"
 	ShortAppID                 = "Aid"
 	ShortAppIDMode             = "Aidm"
 	ShortDeviceID              = "Did"
@@ -36,6 +37,7 @@ const (
 	ShortRemotePort            = "XPort"
 	ShortSlotID                = "Slid"
 	ShortServiceAppCheat       = "SAc"
+	ShortHook                  = "hook"
 	// this is only used in GoBuster and Accelerator for Push UDP
 	ShortSessionID = "Sid"
 
@@ -57,7 +59,6 @@ type Setter interface {
 type Getter interface {
 	Get(key string) string
 }
-
 
 var (
 	sKMap, hKMap map[string]string
@@ -82,6 +83,7 @@ func init() {
 		ShortRemotePort:       HTTPHeaderRemotePort,
 		ShortSlotID:           HTTPHeaderSlotID,
 		ShortServiceAppCheat:  HTTPHeaderServiceAppCheat,
+		ShortHook:             HTTPHeaderHook,
 	}
 
 	hKMap = map[string]string{
@@ -102,6 +104,7 @@ func init() {
 		HTTPHeaderRemotePort:       ShortRemotePort,
 		HTTPHeaderSlotID:           ShortSlotID,
 		HTTPHeaderServiceAppCheat:  ShortServiceAppCheat,
+		HTTPHeaderHook:             ShortHook,
 	}
 }
 
@@ -162,5 +165,4 @@ func (c *Context) HeaderSet(headerField, headerValue string) {
 	if sk, ok := hKMap[headerField]; ok {
 		c.Set(sk, headerValue)
 	}
-	return
 }
