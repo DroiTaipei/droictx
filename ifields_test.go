@@ -18,6 +18,11 @@ type mockSetter map[string]string
 
 func (s mockSetter) Set(key, value string) { s[key] = value }
 
+//Mock GetHeaderer
+type mockGetHer func(key string) string
+
+func (g mockGetHer) GetHeader(key string) string { return g(key) }
+
 func TestHeaderMap(t *testing.T) {
 	c := Context{}
 	c.Set("Aid", "ZXC123ASDQWE")
@@ -324,6 +329,80 @@ func TestSetter(t *testing.T) {
 	}
 	// Test Empty Field
 	if _, ok := s["X-Droi-AidMode"]; ok {
+		t.Error("Aidm should not exists")
+	}
+}
+
+func TestGeHeaderer(t *testing.T) {
+
+	getter := mockGetHer(func(key string) string {
+		if key == "X-Droi-AppID" {
+			return "ZXC123ASDQWE"
+		}
+		if key == "X-Droi-ReqID" {
+			return "1029384756"
+		}
+		if key == "X-Droi-Api-Key" {
+			return "abcdefg123"
+		}
+		if key == "X-Droi-Service-AppID" {
+			return "4RRFFV3edc"
+		}
+		if key == "X-Droi-Role" {
+			return "16384"
+		}
+		if key == "X-Droi-Session-Token" {
+			return "lkjnhbhjw-sdahu"
+		}
+		if key == "X-Droi-URI" {
+			return "/api/v2/xxx/yyy/zzz"
+		}
+		if key == "X-Droi-Method" {
+			return "PATCH"
+		}
+		if key == "X-Droi-Remote-IP" {
+			return "192.168.3.4"
+		}
+		if key == "X-Droi-Remote-Port" {
+			return "26841"
+		}
+		return ""
+	})
+
+	c := GetContextFromGetHeader(getter)
+	if v, ok := c.GetString("Aid"); !ok || v != "ZXC123ASDQWE" {
+		t.Error("AppID not match Aid")
+	}
+	if v, ok := c.GetString("Rid"); !ok || v != "1029384756" {
+		t.Error("ReqID not match Rid")
+	}
+	if v, ok := c.GetString("Ak"); !ok || v != "abcdefg123" {
+		t.Error("APIKey not match Ak")
+	}
+	if v, ok := c.GetString("SAid"); !ok || v != "4RRFFV3edc" {
+		t.Error("Service AppID not match SAid")
+	}
+	if v, ok := c.GetString("R"); !ok || v != "16384" {
+		t.Error("Role not match R")
+	}
+	if v, ok := c.GetString("St"); !ok || v != "lkjnhbhjw-sdahu" {
+		t.Error("Session Token not match St")
+	}
+	if v, ok := c.GetString("XUri"); !ok || v != "/api/v2/xxx/yyy/zzz" {
+		t.Error("URI not match XUri")
+	}
+	if v, ok := c.GetString("XMd"); !ok || v != "PATCH" {
+		t.Error("Method Aid not match XMd")
+	}
+	if v, ok := c.GetString("XIp"); !ok || v != "192.168.3.4" {
+		t.Error("Remote IP not match XIp")
+	}
+	if v, ok := c.GetString("XPort"); !ok || v != "26841" {
+		t.Error("Remote Port not match XPort")
+	}
+	// Test Empty Field
+	m := c.Map()
+	if _, ok := m["Aidm"]; ok {
 		t.Error("Aidm should not exists")
 	}
 }
