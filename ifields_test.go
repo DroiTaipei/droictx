@@ -30,6 +30,7 @@ func TestHeaderMap(t *testing.T) {
 	c.Set("XMd", "PATCH")
 	c.Set("XIp", "192.168.3.4")
 	c.Set("XPort", "26841")
+	c.Set("OpMode", "soft")
 
 	m := c.HeaderMap()
 	v, ok := m["X-Droi-AppID"]
@@ -72,6 +73,10 @@ func TestHeaderMap(t *testing.T) {
 	if !ok || v != "26841" {
 		t.Error("Remote Port not match Xport")
 	}
+	v, ok = m["X-Droi-Op-Mode"]
+	if !ok || v != "soft" {
+		t.Error("Op Mode not match OpMode")
+	}
 }
 
 func TestHeaderSet(t *testing.T) {
@@ -86,6 +91,7 @@ func TestHeaderSet(t *testing.T) {
 	c.HeaderSet("X-Droi-Method", "PATCH")
 	c.HeaderSet("X-Droi-Remote-IP", "192.168.3.4")
 	c.HeaderSet("X-Droi-Remote-Port", "26841")
+	c.HeaderSet("X-Droi-Op-Mode", "soft")
 
 	if v, ok := c.GetString("Aid"); !ok || v != "ZXC123ASDQWE" {
 		t.Error("AppID not match Aid")
@@ -116,6 +122,9 @@ func TestHeaderSet(t *testing.T) {
 	}
 	if v, ok := c.GetString("XPort"); !ok || v != "26841" {
 		t.Error("Remote Port not match XPort")
+	}
+	if v, ok := c.GetString("OpMode"); !ok || v != "soft" {
+		t.Error("Op Mode not match OpMode")
 	}
 }
 
@@ -266,7 +275,6 @@ func TestGetter(t *testing.T) {
 		t.Error("Aidm should not exists")
 	}
 }
-
 
 func TestSetter(t *testing.T) {
 

@@ -20,29 +20,36 @@ const (
 	HTTPHeaderSlotID           = "X-Droi-SlotID"
 	HTTPHeaderServiceAppCheat  = "X-Droi-Service-AppCheat"
 	HTTPHeaderHook             = "X-Droi-Hook"
-	ShortAppID                 = "Aid"
-	ShortAppIDMode             = "Aidm"
-	ShortDeviceID              = "Did"
-	ShortUserID                = "Uid"
-	ShortRequestID             = "Rid"
-	ShortPlatformKey           = "XPk"
-	ShortAPIKey                = "Ak"
-	ShortServiceAppID          = "SAid"
-	ShortServiceAppIDMode      = "SAidm"
-	ShortRole                  = "R"
-	ShortSessionToken          = "St"
-	ShortURI                   = "XUri"
-	ShortMethod                = "XMd"
-	ShortRemoteIP              = "XIp"
-	ShortRemotePort            = "XPort"
-	ShortSlotID                = "Slid"
-	ShortServiceAppCheat       = "SAc"
-	ShortHook                  = "hook"
+	HTTPHeaderOpMode           = "X-Droi-Op-Mode"
+
+	ShortAppID            = "Aid"
+	ShortAppIDMode        = "Aidm"
+	ShortDeviceID         = "Did"
+	ShortUserID           = "Uid"
+	ShortRequestID        = "Rid"
+	ShortPlatformKey      = "XPk"
+	ShortAPIKey           = "Ak"
+	ShortServiceAppID     = "SAid"
+	ShortServiceAppIDMode = "SAidm"
+	ShortRole             = "R"
+	ShortSessionToken     = "St"
+	ShortURI              = "XUri"
+	ShortMethod           = "XMd"
+	ShortRemoteIP         = "XIp"
+	ShortRemotePort       = "XPort"
+	ShortSlotID           = "Slid"
+	ShortServiceAppCheat  = "SAc"
+	ShortHook             = "hook"
+	ShortOpMode           = "OpMode"
 	// this is only used in GoBuster and Accelerator for Push UDP
 	ShortSessionID = "Sid"
 
 	//The most important Key !
 	SystemKey = "2BMustDie"
+
+	// Operation Mode - for soft delete or hard delete
+	SoftOpMode = "soft"
+	HardOpMode = "hard"
 )
 
 //This interface designed for getting DroiCtx from fasthttp *RequestHeader
@@ -84,6 +91,7 @@ func init() {
 		ShortSlotID:           HTTPHeaderSlotID,
 		ShortServiceAppCheat:  HTTPHeaderServiceAppCheat,
 		ShortHook:             HTTPHeaderHook,
+		ShortOpMode:           HTTPHeaderOpMode,
 	}
 
 	hKMap = map[string]string{
@@ -105,6 +113,7 @@ func init() {
 		HTTPHeaderSlotID:           ShortSlotID,
 		HTTPHeaderServiceAppCheat:  ShortServiceAppCheat,
 		HTTPHeaderHook:             ShortHook,
+		HTTPHeaderOpMode:           ShortOpMode,
 	}
 }
 
