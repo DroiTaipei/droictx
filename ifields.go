@@ -60,6 +60,11 @@ type Getter interface {
 	Get(key string) string
 }
 
+//GetHeaderer interface designed for getting DroiCtx from gin.Context.GetHeader
+type GetHeaderer interface {
+	GetHeader(key string) string
+}
+
 var (
 	sKMap, hKMap map[string]string
 )
@@ -135,6 +140,18 @@ func GetContextFromGetter(g Getter) Context {
 	var v string
 	for hk, sk := range hKMap {
 		v = g.Get(hk)
+		if len(v) > 0 {
+			c.Set(sk, v)
+		}
+	}
+	return c
+}
+
+func GetContextFromGetHeader(g GetHeaderer) Context {
+	c := Context{}
+	var v string
+	for hk, sk := range hKMap {
+		v = g.GetHeader(hk)
 		if len(v) > 0 {
 			c.Set(sk, v)
 		}
