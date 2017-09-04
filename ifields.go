@@ -21,6 +21,7 @@ const (
 	HTTPHeaderServiceAppCheat  = "X-Droi-Service-AppCheat"
 	HTTPHeaderHook             = "X-Droi-Hook"
 	HTTPHeaderOpMode           = "X-Droi-Op-Mode"
+	HTTPHeaderComponent        = "X-Droi-Component"
 
 	ShortAppID            = "Aid"
 	ShortAppIDMode        = "Aidm"
@@ -41,6 +42,7 @@ const (
 	ShortServiceAppCheat  = "SAc"
 	ShortHook             = "hook"
 	ShortOpMode           = "OpMode"
+	ShortComponent        = "Comp"
 	// this is only used in GoBuster and Accelerator for Push UDP
 	ShortSessionID = "Sid"
 
@@ -50,6 +52,9 @@ const (
 	// Operation Mode - for soft delete or hard delete
 	SoftOpMode = "soft"
 	HardOpMode = "hard"
+
+	// Component List
+	Abyss = "abyss"
 )
 
 //This interface designed for getting DroiCtx from fasthttp *RequestHeader
@@ -97,6 +102,7 @@ func init() {
 		ShortServiceAppCheat:  HTTPHeaderServiceAppCheat,
 		ShortHook:             HTTPHeaderHook,
 		ShortOpMode:           HTTPHeaderOpMode,
+		ShortComponent:        HTTPHeaderComponent,
 	}
 
 	hKMap = map[string]string{
@@ -119,6 +125,7 @@ func init() {
 		HTTPHeaderServiceAppCheat:  ShortServiceAppCheat,
 		HTTPHeaderHook:             ShortHook,
 		HTTPHeaderOpMode:           ShortOpMode,
+		HTTPHeaderComponent:        ShortComponent,
 	}
 }
 
