@@ -54,7 +54,7 @@ const (
 	HardOpMode = "hard"
 
 	// Component List
-	ComponentAbyss = "abyss"
+	ComponentAbyss = "Abyss"
 )
 
 //This interface designed for getting DroiCtx from fasthttp *RequestHeader
