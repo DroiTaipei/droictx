@@ -2,17 +2,54 @@ package droictx
 
 import (
 	"io"
+	"sync"
+	"time"
 )
+
+// closedchan is a reusable closed channel.
+var closedchan = make(chan struct{})
+
+func init() {
+	close(closedchan)
+}
 
 type contextKV struct {
 	key   string
 	value interface{}
 }
 
-type Context []contextKV
+type Context interface {
+	Set(key string, value interface{})
+	Get(key string) interface{}
+	GetString(key string) (value string, ok bool)
+	GetInt(key string) (value int, ok bool)
+	GetInt64(key string) (value int64, ok bool)
+	Map() (ret map[string]interface{})
+	Reset()
+	SetTimeout(duration time.Duration)
+	ReSetTimeout(duration time.Duration)
+	IsTimeout() bool
+	Timeout() <-chan time.Time
+	Finish()
+	StopTimer()
+	Done() <-chan struct{}
+	SetHTTPHeaders(s Setter)
+	HeaderMap() (ret map[string]string)
+	HeaderSet(headerField, headerValue string)
+}
 
-func (c *Context) Set(key string, value interface{}) {
-	args := *c
+type DoneContext struct {
+	kv []contextKV
+	// if we have to use in gRPC, maybe we could put golang.org/pkg/context here?
+	done chan struct{}
+	mu   sync.Mutex
+	// use Timer for memory fast gc
+	timeout  *time.Timer
+	deadline time.Time
+}
+
+func (c *DoneContext) Set(key string, value interface{}) {
+	args := c.kv
 	n := len(args)
 	for i := 0; i < n; i++ {
 		kv := &args[i]
@@ -28,7 +65,7 @@ func (c *Context) Set(key string, value interface{}) {
 		kv := &args[n]
 		kv.key = key
 		kv.value = value
-		*c = args
+		c.kv = args
 		return
 	}
 
@@ -36,11 +73,11 @@ func (c *Context) Set(key string, value interface{}) {
 		key:   key,
 		value: value,
 	}
-	*c = append(args, kv)
+	c.kv = append(args, kv)
 }
 
-func (c *Context) Get(key string) interface{} {
-	args := *c
+func (c *DoneContext) Get(key string) interface{} {
+	args := c.kv
 	n := len(args)
 	for i := 0; i < n; i++ {
 		kv := &args[i]
@@ -51,7 +88,7 @@ func (c *Context) Get(key string) interface{} {
 	return nil
 }
 
-func (c *Context) GetString(key string) (value string, ok bool) {
+func (c *DoneContext) GetString(key string) (value string, ok bool) {
 	v := c.Get(key)
 	if v == nil {
 		return
@@ -60,7 +97,7 @@ func (c *Context) GetString(key string) (value string, ok bool) {
 	return
 }
 
-func (c *Context) GetInt(key string) (value int, ok bool) {
+func (c *DoneContext) GetInt(key string) (value int, ok bool) {
 	v := c.Get(key)
 	if v == nil {
 		return
@@ -69,7 +106,7 @@ func (c *Context) GetInt(key string) (value int, ok bool) {
 	return
 }
 
-func (c *Context) GetInt64(key string) (value int64, ok bool) {
+func (c *DoneContext) GetInt64(key string) (value int64, ok bool) {
 	v := c.Get(key)
 	if v == nil {
 		return
@@ -78,9 +115,9 @@ func (c *Context) GetInt64(key string) (value int64, ok bool) {
 	return
 }
 
-func (c *Context) Map() (ret map[string]interface{}) {
+func (c *DoneContext) Map() (ret map[string]interface{}) {
 	ret = make(map[string]interface{})
-	args := *c
+	args := c.kv
 	n := len(args)
 	for i := 0; i < n; i++ {
 		ret[args[i].key] = args[i].value
@@ -88,8 +125,8 @@ func (c *Context) Map() (ret map[string]interface{}) {
 	return
 }
 
-func (c *Context) Reset() {
-	args := *c
+func (c *DoneContext) Reset() {
+	args := c.kv
 	n := len(args)
 	for i := 0; i < n; i++ {
 		v := args[i].value
@@ -97,5 +134,62 @@ func (c *Context) Reset() {
 			vc.Close()
 		}
 	}
-	*c = (*c)[:0]
+	c.kv = c.kv[:0]
+}
+
+func (c *DoneContext) SetTimeout(duration time.Duration) {
+	c.deadline = time.Now().Add(duration)
+	c.timeout = time.NewTimer(duration)
+}
+
+func (c *DoneContext) ReSetTimeout(duration time.Duration) {
+	c.timeout.Reset(duration)
+}
+
+func (c *DoneContext) IsTimeout() bool {
+	return time.Now().After(c.deadline)
+}
+
+func (c *DoneContext) Timeout() <-chan time.Time {
+	return c.timeout.C
+}
+
+func (c *DoneContext) Finish() {
+	if c.done == nil {
+		c.done = closedchan
+	} else {
+		close(c.done)
+	}
+}
+
+func (c *DoneContext) StopTimer() {
+	c.timeout.Stop()
+}
+
+// golang.org/pkg/context function
+
+func (c *DoneContext) Done() <-chan struct{} {
+	c.mu.Lock()
+	if c.done == nil {
+		c.done = make(chan struct{})
+	}
+	d := c.done
+	c.mu.Unlock()
+	return d
+}
+
+func (c *DoneContext) Err() error {
+	return nil
+}
+
+func (c *DoneContext) Value(key interface{}) interface{} {
+	return nil
+}
+
+func (c *DoneContext) Deadline() (deadline time.Time, ok bool) {
+	if !c.deadline.IsZero() {
+		deadline = c.deadline
+		ok = true
+	}
+	return
 }

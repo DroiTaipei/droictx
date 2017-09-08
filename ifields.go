@@ -141,7 +141,7 @@ func IFieldShortKeyMap() (keyMap map[string]string) {
 }
 
 func GetContextFromPeeker(p Peeker) Context {
-	c := Context{}
+	c := &DoneContext{}
 	var v []byte
 	for hk, sk := range hKMap {
 		v = p.Peek(hk)
@@ -153,7 +153,7 @@ func GetContextFromPeeker(p Peeker) Context {
 }
 
 func GetContextFromGetter(g Getter) Context {
-	c := Context{}
+	c := &DoneContext{}
 	var v string
 	for hk, sk := range hKMap {
 		v = g.Get(hk)
@@ -165,7 +165,7 @@ func GetContextFromGetter(g Getter) Context {
 }
 
 func GetContextFromGetHeader(g GetHeaderer) Context {
-	c := Context{}
+	c := &DoneContext{}
 	var v string
 	for hk, sk := range hKMap {
 		v = g.GetHeader(hk)
@@ -176,14 +176,14 @@ func GetContextFromGetHeader(g GetHeaderer) Context {
 	return c
 }
 
-func (c *Context) SetHTTPHeaders(s Setter) {
+func (c *DoneContext) SetHTTPHeaders(s Setter) {
 	for hk, sk := range c.HeaderMap() {
 		s.Set(hk, sk)
 	}
 }
 
 // retrun a map, key HTTP Header Field, value is the field value stored in Context
-func (c *Context) HeaderMap() (ret map[string]string) {
+func (c *DoneContext) HeaderMap() (ret map[string]string) {
 	ret = make(map[string]string)
 	for sk, hk := range sKMap {
 		v, _ := c.GetString(sk)
@@ -195,7 +195,7 @@ func (c *Context) HeaderMap() (ret map[string]string) {
 }
 
 // Set Context with Header Key, Store in Context with Short Key
-func (c *Context) HeaderSet(headerField, headerValue string) {
+func (c *DoneContext) HeaderSet(headerField, headerValue string) {
 	if sk, ok := hKMap[headerField]; ok {
 		c.Set(sk, headerValue)
 	}
