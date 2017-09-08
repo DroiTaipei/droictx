@@ -6,6 +6,7 @@ import (
 	"time"
 )
 
+// copy from golang.org/pkg/context
 // closedchan is a reusable closed channel.
 var closedchan = make(chan struct{})
 
@@ -17,6 +18,8 @@ type contextKV struct {
 	key   string
 	value interface{}
 }
+
+// change Context to interface for compatibility, or just change?
 
 type Context interface {
 	Set(key string, value interface{})
@@ -44,7 +47,8 @@ type DoneContext struct {
 	done chan struct{}
 	mu   sync.Mutex
 	// use Timer for memory fast gc
-	timeout  *time.Timer
+	timeout *time.Timer
+	// for isTimeout()... timer cannot check whether is timeout status
 	deadline time.Time
 }
 
