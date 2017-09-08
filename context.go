@@ -30,7 +30,7 @@ type Context interface {
 	Map() (ret map[string]interface{})
 	Reset()
 	SetTimeout(duration time.Duration)
-	ReSetTimeout(duration time.Duration)
+	ResetTimeout(duration time.Duration)
 	IsTimeout() bool
 	Timeout() <-chan time.Time
 	Finish()
@@ -146,7 +146,8 @@ func (c *DoneContext) SetTimeout(duration time.Duration) {
 	c.timeout = time.NewTimer(duration)
 }
 
-func (c *DoneContext) ReSetTimeout(duration time.Duration) {
+func (c *DoneContext) ResetTimeout(duration time.Duration) {
+	c.deadline = time.Now().Add(duration)
 	c.timeout.Reset(duration)
 }
 
