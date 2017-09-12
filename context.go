@@ -156,6 +156,9 @@ func (c *DoneContext) IsTimeout() bool {
 }
 
 func (c *DoneContext) Timeout() <-chan time.Time {
+	if c.timeout == nil {
+		return nil
+	}
 	return c.timeout.C
 }
 
