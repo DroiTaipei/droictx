@@ -37,10 +37,15 @@ type Context interface {
 	Timeout() <-chan time.Time
 	Finish()
 	StopTimer() bool
-	Done() <-chan struct{}
 	SetHTTPHeaders(s Setter)
 	HeaderMap() (ret map[string]string)
 	HeaderSet(headerField, headerValue string)
+
+	// golang context() interface
+	Done() <-chan struct{}
+	Err() error
+	Value(key interface{}) interface{}
+	Deadline() (deadline time.Time, ok bool)
 }
 
 type DoneContext struct {
