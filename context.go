@@ -4,6 +4,8 @@ import (
 	"io"
 	"sync"
 	"time"
+
+	"github.com/DroiTaipei/droipkg"
 )
 
 // copy from golang.org/pkg/context
@@ -29,12 +31,12 @@ type Context interface {
 	GetInt64(key string) (value int64, ok bool)
 	Map() (ret map[string]interface{})
 	Reset()
-	SetTimeout(duration time.Duration)
-	ResetTimeout(duration time.Duration)
+	SetTimeout(duration time.Duration, err droipkg.DroiError)
+	ResetTimeout(duration time.Duration, err droipkg.DroiError)
 	IsTimeout() bool
 	Timeout() <-chan time.Time
 	Finish()
-	StopTimer()
+	StopTimer() bool
 	Done() <-chan struct{}
 	SetHTTPHeaders(s Setter)
 	HeaderMap() (ret map[string]string)
@@ -48,6 +50,8 @@ type DoneContext struct {
 	mu   sync.Mutex
 	// use Timer for memory fast gc
 	timeout *time.Timer
+	// return error when timeout
+	errTimeout droipkg.DroiError
 	// for isTimeout()... timer cannot check whether is timeout status
 	deadline time.Time
 }
@@ -141,14 +145,16 @@ func (c *DoneContext) Reset() {
 	c.kv = c.kv[:0]
 }
 
-func (c *DoneContext) SetTimeout(duration time.Duration) {
+func (c *DoneContext) SetTimeout(duration time.Duration, err droipkg.DroiError) {
 	c.deadline = time.Now().Add(duration)
 	c.timeout = time.NewTimer(duration)
+	c.errTimeout = err
 }
 
-func (c *DoneContext) ResetTimeout(duration time.Duration) {
+func (c *DoneContext) ResetTimeout(duration time.Duration, err droipkg.DroiError) {
 	c.deadline = time.Now().Add(duration)
 	c.timeout.Reset(duration)
+	c.errTimeout = err
 }
 
 func (c *DoneContext) IsTimeout() bool {
@@ -162,16 +168,24 @@ func (c *DoneContext) Timeout() <-chan time.Time {
 	return c.timeout.C
 }
 
+func (c *DoneContext) DroiErr() droipkg.DroiError {
+	return c.errTimeout
+}
+
 func (c *DoneContext) Finish() {
 	if c.done == nil {
 		c.done = closedchan
 	} else {
 		close(c.done)
 	}
+
+	if c.timeout != nil {
+		c.timeout.Stop()
+	}
 }
 
-func (c *DoneContext) StopTimer() {
-	c.timeout.Stop()
+func (c *DoneContext) StopTimer() bool {
+	return c.timeout.Stop()
 }
 
 // golang.org/pkg/context function
@@ -187,7 +201,7 @@ func (c *DoneContext) Done() <-chan struct{} {
 }
 
 func (c *DoneContext) Err() error {
-	return nil
+	return c.errTimeout
 }
 
 func (c *DoneContext) Value(key interface{}) interface{} {
