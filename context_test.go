@@ -8,7 +8,9 @@ import (
 )
 
 func TestDone(t *testing.T) {
-	ctx := &DoneContext{}
+	// test Context type not *DoneContext
+	var ctx Context
+	ctx = &DoneContext{}
 	ctx.SetTimeout(5000*time.Millisecond, nil)
 	go func(ctx Context) {
 		time.Sleep(500 * time.Millisecond)
@@ -28,7 +30,9 @@ func TestDone(t *testing.T) {
 
 func TestTimeout(t *testing.T) {
 	err := droipkg.ConstDroiError("1000000 timeout")
-	ctx := &DoneContext{}
+	// test Context type not *DoneContext
+	var ctx Context
+	ctx = &DoneContext{}
 	ctx.SetTimeout(50*time.Millisecond, err)
 
 	select {
@@ -36,7 +40,7 @@ func TestTimeout(t *testing.T) {
 		ctx.StopTimer()
 		t.Error("context overslept")
 	case <-ctx.Timeout():
-		errTimeout := ctx.DroiErr()
+		errTimeout := ctx.TimeoutErr()
 		if errTimeout.Error() != err.Error() {
 			t.Error("timeout error fail")
 		}

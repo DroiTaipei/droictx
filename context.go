@@ -35,6 +35,7 @@ type Context interface {
 	ResetTimeout(duration time.Duration, err droipkg.DroiError)
 	IsTimeout() bool
 	Timeout() <-chan time.Time
+	TimeoutErr() droipkg.DroiError
 	Finish()
 	StopTimer() bool
 	SetHTTPHeaders(s Setter)
@@ -173,7 +174,7 @@ func (c *DoneContext) Timeout() <-chan time.Time {
 	return c.timeout.C
 }
 
-func (c *DoneContext) DroiErr() droipkg.DroiError {
+func (c *DoneContext) TimeoutErr() droipkg.DroiError {
 	return c.errTimeout
 }
 
