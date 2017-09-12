@@ -173,7 +173,7 @@ func (c *DoneContext) ResetTimeout(duration time.Duration, err droipkg.DroiError
 }
 
 func (c *DoneContext) IsTimeout() bool {
-	return time.Now().After(c.deadline)
+	return time.Now().After(c.deadline) && c.timeout != nil
 }
 
 func (c *DoneContext) Timeout() <-chan time.Time {

@@ -19,12 +19,9 @@ func TestConcurrentKV(t *testing.T) {
 		go func(ctx Context, i int) {
 			time.Sleep(time.Duration(rand.Intn(100)) * time.Millisecond)
 			ctx.Set("whatever", i)
-			n, ok := ctx.GetInt("whatever")
+			_, ok := ctx.GetInt("whatever")
 			if !ok {
 				t.Error("concurrent fail")
-			}
-			if n != i {
-				t.Error("lock fail")
 			}
 			wg.Done()
 		}(ctx, i)
@@ -45,6 +42,34 @@ func TestConcurrentKV(t *testing.T) {
 	wg.Wait()
 }
 
+func TestDeadline(t *testing.T) {
+	var ctx Context
+	ctx = &DoneContext{}
+
+	d, ok := ctx.Deadline()
+	if ok {
+		t.Error("deadline not init, ok should be false")
+	}
+
+	if ctx.IsTimeout() {
+		t.Error("timeout not init, so never timeout")
+	}
+
+	ctx.SetTimeout(500*time.Millisecond, nil)
+	d, ok = ctx.Deadline()
+	if !ok {
+		t.Error("deadline has init, ok should be true")
+	}
+	time.Sleep(500 * time.Millisecond)
+	if !d.Before(time.Now()) {
+		t.Error("deadline wrong")
+	}
+
+	if !ctx.IsTimeout() {
+		t.Error("timeout error")
+	}
+}
+
 func TestDone(t *testing.T) {
 	// test Context type not *DoneContext
 	var ctx Context
@@ -58,6 +83,7 @@ func TestDone(t *testing.T) {
 	select {
 	case <-ctx.Done():
 		// check finish() have stopped timer
+		time.Sleep(100 * time.Millisecond)
 		if ctx.StopTimer() {
 			t.Error("Finish() haven't stop timer")
 		}
