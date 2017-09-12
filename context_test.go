@@ -1,11 +1,49 @@
 package droictx
 
 import (
+	"math/rand"
+	"sync"
 	"testing"
 	"time"
 
 	"github.com/DroiTaipei/droipkg"
 )
+
+func TestConcurrentKV(t *testing.T) {
+	// no panic is good
+	var wg sync.WaitGroup
+	var ctx Context
+	ctx = &DoneContext{}
+	ctx.Set("whatever", 0)
+	for i := 0; i < 20; i++ {
+		go func(ctx Context, i int) {
+			time.Sleep(time.Duration(rand.Intn(100)) * time.Millisecond)
+			ctx.Set("whatever", i)
+			n, ok := ctx.GetInt("whatever")
+			if !ok {
+				t.Error("concurrent fail")
+			}
+			if n != i {
+				t.Error("lock fail")
+			}
+			wg.Done()
+		}(ctx, i)
+		wg.Add(1)
+	}
+
+	for i := 0; i < 20; i++ {
+		go func(ctx Context) {
+			time.Sleep(time.Duration(rand.Intn(100)) * time.Millisecond)
+			_, ok := ctx.GetInt("whatever")
+			if !ok {
+				t.Error("concurrent fail")
+			}
+			wg.Done()
+		}(ctx)
+		wg.Add(1)
+	}
+	wg.Wait()
+}
 
 func TestDone(t *testing.T) {
 	// test Context type not *DoneContext

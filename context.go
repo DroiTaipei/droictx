@@ -50,7 +50,8 @@ type Context interface {
 }
 
 type DoneContext struct {
-	kv []contextKV
+	kv     []contextKV
+	kvRWmu sync.RWMutex
 	// if we have to use in gRPC, maybe we could put golang.org/pkg/context here?
 	done chan struct{}
 	mu   sync.Mutex
@@ -87,10 +88,14 @@ func (c *DoneContext) Set(key string, value interface{}) {
 		key:   key,
 		value: value,
 	}
+	c.kvRWmu.Lock()
 	c.kv = append(args, kv)
+	c.kvRWmu.Unlock()
 }
 
 func (c *DoneContext) Get(key string) interface{} {
+	c.kvRWmu.RLock()
+	defer c.kvRWmu.RUnlock()
 	args := c.kv
 	n := len(args)
 	for i := 0; i < n; i++ {
@@ -131,6 +136,8 @@ func (c *DoneContext) GetInt64(key string) (value int64, ok bool) {
 
 func (c *DoneContext) Map() (ret map[string]interface{}) {
 	ret = make(map[string]interface{})
+	c.kvRWmu.RLock()
+	defer c.kvRWmu.RUnlock()
 	args := c.kv
 	n := len(args)
 	for i := 0; i < n; i++ {
@@ -140,6 +147,7 @@ func (c *DoneContext) Map() (ret map[string]interface{}) {
 }
 
 func (c *DoneContext) Reset() {
+	c.kvRWmu.Lock()
 	args := c.kv
 	n := len(args)
 	for i := 0; i < n; i++ {
@@ -149,6 +157,7 @@ func (c *DoneContext) Reset() {
 		}
 	}
 	c.kv = c.kv[:0]
+	c.kvRWmu.Unlock()
 }
 
 func (c *DoneContext) SetTimeout(duration time.Duration, err droipkg.DroiError) {
