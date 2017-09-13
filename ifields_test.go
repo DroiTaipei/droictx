@@ -1,8 +1,6 @@
 package droictx
 
-import (
-	"testing"
-)
+import "testing"
 
 // Mock Peeker
 type mockPeeker func(key string) []byte
@@ -24,7 +22,7 @@ type mockGetHer func(key string) string
 func (g mockGetHer) GetHeader(key string) string { return g(key) }
 
 func TestHeaderMap(t *testing.T) {
-	c := Context{}
+	c := &DoneContext{}
 	c.Set("Aid", "ZXC123ASDQWE")
 	c.Set("Rid", "1029384756")
 	c.Set("Ak", "abcdefg123")
@@ -85,7 +83,7 @@ func TestHeaderMap(t *testing.T) {
 }
 
 func TestHeaderSet(t *testing.T) {
-	c := Context{}
+	c := &DoneContext{}
 	c.HeaderSet("X-Droi-AppID", "ZXC123ASDQWE")
 	c.HeaderSet("X-Droi-ReqID", "1029384756")
 	c.HeaderSet("X-Droi-Api-Key", "abcdefg123")
@@ -284,7 +282,7 @@ func TestGetter(t *testing.T) {
 func TestSetter(t *testing.T) {
 
 	var s = make(mockSetter)
-	c := Context{}
+	c := &DoneContext{}
 	c.HeaderSet("X-Droi-AppID", "ZXC123ASDQWE")
 	c.HeaderSet("X-Droi-ReqID", "1029384756")
 	c.HeaderSet("X-Droi-Api-Key", "abcdefg123")
