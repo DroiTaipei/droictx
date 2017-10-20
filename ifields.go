@@ -1,6 +1,8 @@
 package droictx
 
 const (
+	HTTPHeaderDevToken         = "X-Droi-DeveloperToken"
+	HTTPHeaderDevID            = "X-Droi-DeveloperId"
 	HTTPHeaderAppID            = "X-Droi-AppID"
 	HTTPHeaderAppIDMode        = "X-Droi-AidMode"
 	HTTPHeaderDeviceID         = "X-Droi-DeviceID"
@@ -23,6 +25,8 @@ const (
 	HTTPHeaderOpMode           = "X-Droi-Op-Mode"
 	HTTPHeaderComponent        = "X-Droi-Component"
 
+	ShortDevToken         = "DeidTk"
+	ShortDevID            = "Deid"
 	ShortAppID            = "Aid"
 	ShortAppIDMode        = "Aidm"
 	ShortDeviceID         = "Did"
