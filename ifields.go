@@ -24,6 +24,10 @@ const (
 	HTTPHeaderHook             = "X-Droi-Hook"
 	HTTPHeaderOpMode           = "X-Droi-Op-Mode"
 	HTTPHeaderComponent        = "X-Droi-Component"
+	// for trace
+	HTTPHeaderTrace         = "uber-trace-id"
+	HTTPHeaderJaegerDebug   = "jaeger-debug-id"
+	HTTPHeaderJaegerBaggage = "jaeger-baggage"
 
 	ShortDevToken         = "DeidTk"
 	ShortDevID            = "Deid"
@@ -49,6 +53,10 @@ const (
 	ShortComponent        = "Comp"
 	// this is only used in GoBuster and Accelerator for Push UDP
 	ShortSessionID = "Sid"
+
+	ShortTrace         = "uti"
+	ShortJaegerDebug   = "jdi"
+	ShortJaegerBaggage = "jb"
 
 	//The most important Key !
 	SystemKey = "2BMustDie"
@@ -108,6 +116,9 @@ func init() {
 		ShortHook:             HTTPHeaderHook,
 		ShortOpMode:           HTTPHeaderOpMode,
 		ShortComponent:        HTTPHeaderComponent,
+		ShortTrace:            HTTPHeaderTrace,
+		ShortJaegerDebug:      HTTPHeaderJaegerDebug,
+		ShortJaegerBaggage:    HTTPHeaderJaegerBaggage,
 	}
 
 	hKMap = map[string]string{
@@ -131,6 +142,9 @@ func init() {
 		HTTPHeaderHook:             ShortHook,
 		HTTPHeaderOpMode:           ShortOpMode,
 		HTTPHeaderComponent:        ShortComponent,
+		HTTPHeaderTrace:            ShortTrace,
+		HTTPHeaderJaegerDebug:      ShortJaegerDebug,
+		HTTPHeaderJaegerBaggage:    ShortJaegerBaggage,
 	}
 }
 
